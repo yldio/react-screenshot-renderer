@@ -1,25 +1,50 @@
 const puppeteer = require('puppeteer');
-const { ServerStyleSheet, StyleSheetManager } = require('styled-components');
 const StyleSheet = require('styled-components/lib/models/StyleSheet');
+const { ServerStyleSheet } = require('styled-components');
 const { renderToString } = require('react-dom/server');
-const React = require('react');
+const micro = require('micro');
 
-StyleSheet.default.reset(true); // reset to use server stylesheet
+const HTML = `
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+`;
+
+let port = 0;
+const server = micro(async (req, res) => HTML).listen(() => {
+  port = server.address().port;
+});
+
+StyleSheet.default.reset(true);
 
 module.exports = async element => {
   const sheet = new ServerStyleSheet();
-  const html = renderToString(
-    React.createElement(StyleSheetManager, { sheet: sheet.instance }, element)
-  );
+  const html = renderToString(element);
+  const css = sheet.instance.toHTML();
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  const css = sheet.getStyleTags();
+  await page.setViewport({
+    width: 1280,
+    height: 1024
+  });
+
+  await page.goto(`http://0.0.0.0:${port}`, {
+    waitUntil: 'networkidle2'
+  });
 
   await page.evaluate(
     (html, css) => {
-      window.document.body.innerHTML = html;
+      window.document.getElementById('root').innerHTML = html;
       window.document.head.insertAdjacentHTML('beforeend', css);
     },
     html,
