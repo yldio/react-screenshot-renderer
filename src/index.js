@@ -1,8 +1,9 @@
 const puppeteer = require('puppeteer');
-const StyleSheet = require('styled-components/lib/models/StyleSheet');
-const { ServerStyleSheet } = require('styled-components');
+const { ServerStyleSheet, __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS } = require('styled-components');
 const { renderToString } = require('react-dom/server');
 const micro = require('micro');
+
+const { StyleSheet } = __DO_NOT_USE_OR_YOU_WILL_BE_HAUNTED_BY_SPOOKY_GHOSTS;
 
 const HTML = `
 <!doctype html>
@@ -23,7 +24,7 @@ const server = micro(async (req, res) => HTML).listen(() => {
   port = server.address().port;
 });
 
-StyleSheet.default.reset(true);
+StyleSheet.reset(true);
 
 module.exports = async element => {
   const sheet = new ServerStyleSheet();

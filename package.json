@@ -1,26 +1,31 @@
 {
   "name": "react-screenshot-renderer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MPL-2.0",
   "repository": "github:yldio/react-screenshot-renderer",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint . --fix --ext .js --ext .md",
-    "fmt": "prettier --write --single-quote src/*.js *.md *.json"
-  },
-  "devDependencies": {
-    "eslint": "^4.16.0",
-    "eslint-config-joyent-portal": "^3.2.0",
-    "prettier": "^1.10.2"
+    "fmt": "prettier --write --single-quote src/*.js *.md *.json",
+    "test": "NODE_ENV=test joyent-react-scripts test --env=jsdom"
   },
   "dependencies": {
     "micro": "^9.1.0",
     "puppeteer": "^1.0.0"
   },
-  "peer-dependencies": {
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-joyent-portal": "^3.3.1",
     "jest-image-snapshot": "^2.3.0",
+    "joyent-react-scripts": "^7.2.2",
+    "prettier": "^1.10.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "styled-components": "^2.4.0"
+    "styled-components": "^3.1.3"
+  },
+  "peer-dependencies": {
+    "jest-image-snapshot": "^2.3.0",
+    "react-dom": "^16.2.0",
+    "styled-components": "^3.1.3"
   }
 }
